@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 
+
 app = Flask('Brain-Tumor-Classification')
 model = load_model('./Trained_Models/Sequential_13_0.999.keras')
 
@@ -24,7 +25,7 @@ def prepare_image_from_url(img_url):
         return img, None
     except Exception as e:
         return None, f"Error processing image: {str(e)}"
-
+    
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -42,9 +43,10 @@ def predict():
         return jsonify({'error': error}), 500
 
     try:
+        CLASS_NAMES = ["Brain Tumor", "Healthy"] 
         prediction = model.predict(img)
-        result = 'Positive' if prediction[0] > 0.5 else 'Negative'  # Binary classification
-        return jsonify({'prediction': result})
+        predicted_class = int(prediction[0] > 0.5) 
+        return jsonify({'prediction': CLASS_NAMES[predicted_class]})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
