@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brain-tumor-classification
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: brain-tumor-classification
+  template:
+    metadata:
+      labels:
+        app: brain-tumor-classification
+    spec:
+      containers:
+      - name: brain-tumor-classification
+        image: kamoliddinnabijonov/brain-tumor-classification:backend
+        ports:
+        - containerPort: 9696
